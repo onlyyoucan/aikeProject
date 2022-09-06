@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TMedicalCostPersonArchivesMapper">
+    
+    <resultMap type="TMedicalCostPersonArchives" id="TMedicalCostPersonArchivesResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="code"    column="code"    />
+        <result property="sex"    column="sex"    />
+    </resultMap>
+
+    <sql id="selectTMedicalCostPersonArchivesVo">
+        select id, name, age, code, sex from t_medical_cost_person_archives
+    </sql>
+
+    <select id="selectTMedicalCostPersonArchivesList" parameterType="TMedicalCostPersonArchives" resultMap="TMedicalCostPersonArchivesResult">
+        <include refid="selectTMedicalCostPersonArchivesVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+        </where>
+    </select>
+    
+    <select id="selectTMedicalCostPersonArchivesById" parameterType="String" resultMap="TMedicalCostPersonArchivesResult">
+        <include refid="selectTMedicalCostPersonArchivesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTMedicalCostPersonArchives" parameterType="TMedicalCostPersonArchives">
+        insert into t_medical_cost_person_archives
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="age != null">age,</if>
+            <if test="code != null">code,</if>
+            <if test="sex != null">sex,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="code != null">#{code},</if>
+            <if test="sex != null">#{sex},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMedicalCostPersonArchives" parameterType="TMedicalCostPersonArchives">
+        update t_medical_cost_person_archives
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="sex != null">sex = #{sex},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMedicalCostPersonArchivesById" parameterType="String">
+        delete from t_medical_cost_person_archives where id = #{id}
+    </delete>
+
+    <delete id="deleteTMedicalCostPersonArchivesByIds" parameterType="String">
+        delete from t_medical_cost_person_archives where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
